@@ -28,7 +28,7 @@ def acceptConnection():
         print("Someone has just jacked in!")
         client.send(bytes("Hello, kind stranger! Now I got your IP and personal details, idiot!", "utf16"))
         addresses[client] = client_addr
-        Thread(target=handle_client, args=(client,)).start()
+        Thread(target=handleClient, args=(client,)).start()
 
 def handleClient(client):
     name = client.recv(BUFSIZE).decode("utf16")
