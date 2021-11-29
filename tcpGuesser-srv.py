@@ -36,6 +36,8 @@ def handleClient(client):
     broadcast(bytes("Intruder alert!!!", "utf16"))
     clients[client] = name
 
+    bPlayingNumberGame = False;
+
     while True:
         msg = client.recv(BUFSIZE)
         if msg != bytes("fuck this I'm out", "utf16"):
@@ -44,12 +46,17 @@ def handleClient(client):
             randInt = randint(1, 99999)
             broadcast("I got you a number, idiots!")
             broadcast(randInt)
+            bPlayingNumberGame = True;
         else:
             client.send(bytes("fuck this I'm out", "utf16"))
             client.close()
             del clients[client]
             broadcast(bytes("Someone has just left! Fucker!!", "utf16"))
             break
+        if bPlayingNumberGame & randInt in msg:
+            broadcast("You got the number!")
+        elif bPlayingNumberGame & randInt not in msg:
+            broadcast("You missed, dickhead!")
 
 def broadcast(msg, prefix=""):
     for sock in clients:
